@@ -1,0 +1,33 @@
+#How to determine if there is an overlapping interval:
+# if end_i >= start_j, the two given intervals should be merged.
+# the above should consider all pairs, as we can flip it to be equivalent to start_i <= end_j
+#how to do:
+# loop through all intervals using a while loop which resets to first interval in the list upon each merger
+# create an inner loop that checks the current interval against all other intervals
+# if an interval pair meets the criteria above (end_i  >= start_j and end_j >= start_i), merge them
+
+#how to merge:
+# set end_i = end_j, pop interval[j]
+
+class Solution:
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        i = 0
+        numIntervals = len(intervals)
+        while i < numIntervals:
+            mergeOccured = False
+            firstInterval = intervals[i]
+            for j in range(i + 1, numIntervals):
+                secondInterval = intervals[j]
+                if firstInterval[1] >= secondInterval[0] and secondInterval[1] >= firstInterval[0]:
+                    firstInterval[0] = min(firstInterval[0], secondInterval[0])
+                    firstInterval[1] = max(firstInterval[1], secondInterval[1])
+                    
+                    intervals.pop(j)
+                    numIntervals -= 1
+                    mergeOccured = True
+                    break
+            if mergeOccured == True:
+                i = 0
+            else:
+                i += 1
+        return intervals
