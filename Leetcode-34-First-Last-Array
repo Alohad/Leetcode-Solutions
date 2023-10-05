@@ -1,0 +1,37 @@
+class Solution:
+    def searchRange(self, nums: List[int], target: int) -> List[int]:
+        leftMostIndex = rightMostIndex = -1
+        leftPointer = 0
+        rightPointer = len(nums) - 1
+
+        while leftPointer <= rightPointer:
+            pivotIndex = (leftPointer + rightPointer) // 2
+            pivotVal = nums[pivotIndex]
+
+            if pivotVal < target:
+                leftPointer = pivotIndex + 1
+
+            elif pivotVal > target:
+                rightPointer = pivotIndex - 1
+
+            else:
+                return self.findBoundary(nums, target, pivotIndex)
+
+        return [-1, -1]
+    
+    def findBoundary(self, nums: List[int], target: int, startingIndex: int) -> List[int]:
+        leftMostIndex = rightMostIndex = startingIndex
+
+        for i in range(startingIndex, len(nums)):
+            if nums[i] == target:
+                rightMostIndex = i
+            else:
+                break
+
+        for i in range(startingIndex, -1, -1):
+            if nums[i] == target:
+                leftMostIndex = i
+            else:
+                break
+        
+        return [leftMostIndex, rightMostIndex]
